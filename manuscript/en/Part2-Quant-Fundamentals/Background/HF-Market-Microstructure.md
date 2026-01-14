@@ -194,7 +194,7 @@ Market Maker Strategy:
 | Goal | Earn spread | Earn price movement |
 | Holding period | Very short (seconds/minutes) | Longer (hours/days) |
 | Risk exposure | Minimize directional | Has directional exposure |
-| Profit source | Volume × Spread | Prediction accuracy |
+| Profit source | Spread − Adverse selection − Inventory cost | Prediction accuracy |
 
 ---
 
@@ -235,11 +235,18 @@ Applications:
 
 | Strategy Type | Description | Profit Source |
 |---------------|-------------|---------------|
-| Market Making | Two-sided quotes earn spread | Volume × Spread |
-| Statistical Arbitrage | Exploit price deviation mean reversion | Price dislocation correction |
-| News Trading | Millisecond news interpretation | Information advantage |
+| Market Making | Two-sided quotes earn spread | Spread revenue − Adverse selection − Inventory risk |
+| Statistical Arbitrage* | Exploit price deviation mean reversion | Price dislocation correction |
+| News Trading | Fast news interpretation (ms to minutes) | Information advantage |
 | Latency Arbitrage | Exploit inter-exchange delays | Speed advantage |
-| Structural Arbitrage | Exploit market structure gaps | System understanding |
+| Structural Arbitrage | Exploit market structure mechanics (rebates, auctions, ETF creation/redemption) | System understanding |
+
+> **\* About Statistical Arbitrage**: Stat arb is NOT exclusive to high-frequency trading. By holding period:
+> - **High-frequency stat arb** (ms to seconds): Cross-exchange microstructure signals
+> - **Intraday stat arb** (minutes to hours): Pairs trading, ETF-constituent arbitrage
+> - **Medium/low-frequency stat arb** (days to weeks): Multi-factor, sector-neutral strategies
+>
+> Whether to go high-frequency depends on: **Signal decay speed vs. trading costs**. Fast decay "forces" high-frequency.
 
 **Latency Arbitrage Example**:
 
@@ -250,9 +257,15 @@ BATS Price: $185.30 (delayed update)
 Strategy:
   Buy on BATS @ $185.30
   Sell on NYSE @ $185.35
-  Risk-free $0.05 profit
+  Theoretical spread $0.05
 
-Prerequisite: Be faster than everyone else
+⚠️ Real-world risks:
+  - Leg risk: May only fill one side
+  - Queue risk: Your order may not get filled at posted price
+  - Adverse selection: Price may reverse instantly
+  - Fees/slippage: May eat into profit
+
+Prerequisite: Be faster than everyone else, and profit must cover fees and slippage
 ```
 
 ---
